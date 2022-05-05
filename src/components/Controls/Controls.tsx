@@ -12,10 +12,11 @@ interface ControlsProps {
 
 const Controls: FC<ControlsProps> = ({show}) => {
 
-  // ToDo: listen to playback events and update the paused state!
-
   const [paused, setPaused] = useState<boolean>(true);
   const videoPlayer = useContext(VideoContext);
+  
+  videoPlayer.target.addEventListener('play', () => setPaused(false));
+  videoPlayer.target.addEventListener('pause', () => setPaused(true));
 
   const togglePlay = (): void => {
     if(paused) {      
@@ -23,7 +24,6 @@ const Controls: FC<ControlsProps> = ({show}) => {
     } else {
       videoPlayer.pause();
     }
-    setPaused(!paused);
   };
 
   return (
