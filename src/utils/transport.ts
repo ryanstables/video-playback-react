@@ -1,8 +1,7 @@
 import { VideoPlayer } from "../types/interfaces";
 
 export class VideoPlayerObject implements VideoPlayer {
-  
-  duration!: number;
+
   video: HTMLVideoElement | null = null;
   target = new EventTarget();
 

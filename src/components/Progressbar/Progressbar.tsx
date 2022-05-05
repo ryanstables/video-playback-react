@@ -13,23 +13,16 @@ const Progressbar: FC<ProgressbarProps> = () => {
   const videoPlayer = useContext(VideoContext);
   const progressBarRef = useRef<HTMLDivElement>(null);
   
-  const timeToProgress = (time: number): number => {
+  
+  const mapTimeToWidth = (time: number): number => {
     const dur = videoPlayer.video?.duration ? videoPlayer.video.duration : 0;
-    return Math.max(0, Math.min(time / dur, 100));
-  }
-
-  const mapToTrack = (x: number): number => {
-    if(progressBarRef.current) {
-      return x * progressBarRef.current.clientWidth;
-    } else {
-      return 0;
-    }
+    const x = Math.max(0, Math.min(time / dur, 100));
+    return !!progressBarRef.current ? x * progressBarRef.current.clientWidth : 0;
   }
 
   videoPlayer.target.addEventListener('timeupdate', () => {
     if(progressBarRef && videoPlayer.video) {
-      const prog = timeToProgress(videoPlayer.video.currentTime);
-      setProgressLength(mapToTrack(prog));
+      setProgressLength(mapTimeToWidth(videoPlayer.video.currentTime));
     }
   });
 
@@ -37,15 +30,11 @@ const Progressbar: FC<ProgressbarProps> = () => {
     const frames: KeyFrame[] = getKeyFrames().map(frame => {
       return {
         ...frame, 
-        position: mapToTrack(timeToProgress(frame.timestamp))
+        position: mapTimeToWidth(frame.timestamp)
       };
     });
     setKeyframes(frames);
   });
-
-  const scrub = (timestamp: number) => {
-    videoPlayer.skipTo(timestamp);
-  };
 
   const updateFrameVisibility = (frame: KeyFrame, show: boolean) => {
     const frames = [...keyframes];
@@ -61,7 +50,7 @@ const Progressbar: FC<ProgressbarProps> = () => {
       key={frame.id}
       className={styles.keyframe}
       style={{left: `${frame.position}px`}}
-      onMouseDown={() => scrub(frame.timestamp)}
+      onMouseDown={() => videoPlayer.skipTo(frame.timestamp)}
       onMouseEnter={() => updateFrameVisibility(frame, true)}
       onMouseLeave={() => updateFrameVisibility(frame, false)}
   >
