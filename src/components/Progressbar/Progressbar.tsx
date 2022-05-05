@@ -26,7 +26,7 @@ const Progressbar: FC<ProgressbarProps> = () => {
     }
   });
 
-  videoPlayer.target.addEventListener('loaded', () => {
+  videoPlayer.target.addEventListener('loaded', () => {    
     const frames: KeyFrame[] = getKeyFrames().map(frame => {
       return {
         ...frame, 
@@ -62,9 +62,13 @@ const Progressbar: FC<ProgressbarProps> = () => {
             style={{width: `${progressLength}%`}}
           ></div>
         </div>
-
-        {keyframes.map(frame => <ProgressFrame frame={frame} setVisibility={updateFrameVisibility}/>)}
-
+        {keyframes.map(frame => 
+          <ProgressFrame 
+            key={frame.id} 
+            frame={frame} 
+            setVisibility={updateFrameVisibility}
+          />
+        )}
       </div>
     </div>
   );
