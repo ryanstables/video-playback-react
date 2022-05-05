@@ -12,8 +12,10 @@ export interface KeyFrame extends SeekableItem{
 export interface VideoPlayer {
   duration: number;
   video: HTMLVideoElement | null;
+  target: EventTarget;
   loadVideo(video: HTMLVideoElement | null): void;
   play(): void;
   pause(): void;
   skip(amount: number): void;
+  skipTo(time: number): void;
 }

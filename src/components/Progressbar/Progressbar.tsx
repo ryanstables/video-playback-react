@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useRef } from 'react';
 import { VideoContext } from '../../App';
 import { KeyFrame } from '../../types/interfaces';
 import { getKeyFrames } from '../../utils/data';
@@ -11,13 +11,41 @@ const Progressbar: FC<ProgressbarProps> = () => {
   const [progressLength, setProgressLength] = React.useState<number>(0);
   const [keyframes, setKeyframes] = React.useState<KeyFrame[]>([]);
   const videoPlayer = useContext(VideoContext);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   
-  // 1. load key frames
-  // setKeyframes(getKeyFrames()); // but map through the element width when resized
+  const timeToProgress = (time: number): number => {
+    const dur = videoPlayer.video?.duration ? videoPlayer.video.duration : 0;
+    return Math.max(0, Math.min(time / dur, 100));
+  }
 
-  // 2. update the progressLength when the video.currentTime changes...
+  const mapToTrack = (x: number): number => {
+    if(progressBarRef.current) {
+      return x * progressBarRef.current.clientWidth;
+    } else {
+      return 0;
+    }
+  }
 
-  const scrub = (timestamp: number) => {};
+  videoPlayer.target.addEventListener('timeupdate', () => {
+    if(progressBarRef && videoPlayer.video) {
+      const prog = timeToProgress(videoPlayer.video.currentTime);
+      setProgressLength(mapToTrack(prog));
+    }
+  });
+
+  videoPlayer.target.addEventListener('loaded', () => {
+    const frames: KeyFrame[] = getKeyFrames().map(frame => {
+      return {
+        ...frame, 
+        position: mapToTrack(timeToProgress(frame.timestamp))
+      };
+    });
+    setKeyframes(frames);
+  });
+
+  const scrub = (timestamp: number) => {
+    videoPlayer.skipTo(timestamp);
+  };
 
   const updateFrameVisibility = (frame: KeyFrame, show: boolean) => {
     const frames = [...keyframes];
@@ -51,7 +79,11 @@ const Progressbar: FC<ProgressbarProps> = () => {
   );
 
   return (
-    <div className={styles.Progressbar} data-testid="Progressbar">      
+    <div 
+      className={styles.Progressbar} 
+      data-testid="Progressbar"
+      ref={progressBarRef}
+    >
       <div 
         id="track"
         className={styles.track}
