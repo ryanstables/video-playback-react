@@ -37,19 +37,26 @@ const Controls: FC<ControlsProps> = ({show}) => {
       className={`${styles.Controls} ${show && styles.show}`} data-testid="Controls">      
       <div className={styles.controlBox} id="control-panel">
         <button 
+            className={styles.controlButton}
             onClick={(e) => skip(e, -1)}>
             <img src={rewind} alt="Skip backwards 1s" />
             <p>1 second</p>
         </button>
 
-        <button onClick={(e) => togglePlay(e)} >
+        <button 
+          className={styles.controlButton}
+          onClick={(e) => togglePlay(e)} 
+        >
           {paused ? 
             <img src={play} alt="Play" id="play" /> : 
             <img src={pause} alt="Pause" id="pause" />
           }
         </button>
 
-        <button onClick={(e) => skip(e, 1)}>
+        <button 
+          className={styles.controlButton}
+          onClick={(e) => skip(e, 1)}
+        >
           <img src={forward} alt="Skip forwards 1s" />
           <p>1 second</p>
         </button>
