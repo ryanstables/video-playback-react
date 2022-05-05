@@ -5,7 +5,7 @@ import Controls from './Controls';
 
 describe('<Controls />', () => {
   test('it should mount', () => {
-    render(<Controls />);
+    render(<Controls show={false} />);
     
     const controls = screen.getByTestId('Controls');
 

@@ -1,1 +1,9 @@
-.Video {}
+.Video {
+  width: 100%;
+  .videoContainer {
+    position: relative;
+    .videoElement {
+      width: 100%; 
+    }
+  }
+}
