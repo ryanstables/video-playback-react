@@ -1,36 +1,49 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import styles from './Controls.module.scss';
 import rewind from '../../assets/rewind.svg';
 import forward from '../../assets/forward.svg';
 import play from '../../assets/play.svg';
 import pause from '../../assets/pause.svg';
+import { VideoContext } from '../../App';
 
 interface ControlsProps {
   show: boolean
 }
 
 const Controls: FC<ControlsProps> = ({show}) => {
-  
-  const [paused, setpaused] = useState<boolean>(true);
 
-  const togglePlay = (): void => {};
-  const skip = (amount: number) => {};
+  // ToDo: listen to playback events and update the paused state!
+
+  const [paused, setPaused] = useState<boolean>(true);
+  const videoPlayer = useContext(VideoContext);
+
+  const togglePlay = (): void => {
+    if(paused) {      
+      videoPlayer.play();
+    } else {
+      videoPlayer.pause();
+    }
+    setPaused(!paused);
+  };
 
   return (
     <div 
       className={`${styles.Controls} ${show && styles.show}`} data-testid="Controls">      
       <div className={styles.controlBox} id="control-panel">
         <button 
-            onClick={() => skip(-1)}>
+            onClick={() => videoPlayer.skip(-1)}>
             <img src={rewind} alt="Skip backwards 1s" />
             <p>1 second</p>
         </button>
 
         <button onClick={() => togglePlay()} >
-          {paused ? <img src={play} alt="Play" id="play" /> : <img src={pause} alt="Pause" id="pause" />}
+          {paused ? 
+            <img src={play} alt="Play" id="play" /> : 
+            <img src={pause} alt="Pause" id="pause" />
+          }
         </button>
 
-        <button onClick={() => skip(1)}>
+        <button onClick={() => videoPlayer.skip(1)}>
           <img src={forward} alt="Skip forwards 1s" />
           <p>1 second</p>
         </button>
