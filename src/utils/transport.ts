@@ -45,17 +45,11 @@ export class VideoPlayerObject implements VideoPlayer {
   }
 
   private configureListeners (video: HTMLVideoElement) {
-    // the video has loaded...    
+    // This provides a persistent EventTarget for listener to bind to when the underlying video can be NULL.
     video.addEventListener('canplay', () => this.target.dispatchEvent(new Event('loaded')));
-    
-    // the playhead is moving...
     video.addEventListener('timeupdate', () => this.target.dispatchEvent(new Event('timeupdate')));
-    
-    // playback has started...
     video.addEventListener('play', () => this.target.dispatchEvent(new Event('play')));
     video.addEventListener('playing', () => this.target.dispatchEvent(new Event('play')));
-
-    // playback has ended...
     video.addEventListener('ended', () => this.target.dispatchEvent(new Event('pause')));
     video.addEventListener('pause', () => this.target.dispatchEvent(new Event('pause')));
   }
