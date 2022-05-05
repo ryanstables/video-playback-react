@@ -25,13 +25,13 @@ const ProgressFrame: FC<ProgressFrameProps> = ({frame, setVisibility}) => {
       <div
         className={`${styles.thumbnail} ${frame.show && styles.show}`}
       >
-        <img 
+        <img
           src={frame.image} 
           className={styles.dogpic}
           alt="Frame" 
         />
       </div>
-    </div>    
+    </div>
   )};
 
 export default ProgressFrame;

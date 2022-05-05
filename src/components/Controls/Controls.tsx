@@ -18,7 +18,8 @@ const Controls: FC<ControlsProps> = ({show}) => {
   videoPlayer.target.addEventListener('play', () => setPaused(false));
   videoPlayer.target.addEventListener('pause', () => setPaused(true));
 
-  const togglePlay = (): void => {
+  const togglePlay = (e: React.MouseEvent): void => {
+    e.stopPropagation();
     if(paused) {      
       videoPlayer.play();
     } else {
@@ -26,24 +27,29 @@ const Controls: FC<ControlsProps> = ({show}) => {
     }
   };
 
+  const skip = (e: React.MouseEvent, amount: number): void => {
+    e.preventDefault();
+    videoPlayer.skip(amount);
+  }
+
   return (
     <div 
       className={`${styles.Controls} ${show && styles.show}`} data-testid="Controls">      
       <div className={styles.controlBox} id="control-panel">
         <button 
-            onClick={() => videoPlayer.skip(-1)}>
+            onClick={(e) => skip(e, -1)}>
             <img src={rewind} alt="Skip backwards 1s" />
             <p>1 second</p>
         </button>
 
-        <button onClick={() => togglePlay()} >
+        <button onClick={(e) => togglePlay(e)} >
           {paused ? 
             <img src={play} alt="Play" id="play" /> : 
             <img src={pause} alt="Pause" id="pause" />
           }
         </button>
 
-        <button onClick={() => videoPlayer.skip(1)}>
+        <button onClick={(e) => skip(e, 1)}>
           <img src={forward} alt="Skip forwards 1s" />
           <p>1 second</p>
         </button>

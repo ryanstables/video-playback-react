@@ -2,6 +2,7 @@ import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import Controls from '../Controls/Controls';
 import styles from './Video.module.scss';
 import videoFromFile from '../../assets/dog.mp4';
+import dogCoverImg from '../../assets/dog3.jpeg';
 import { VideoContext } from '../../App';
 
 interface VideoProps {}
@@ -13,8 +14,8 @@ const Video: FC<VideoProps> = () => {
   const videoPlayer = useContext(VideoContext);
 
   useEffect(() => {
+    // this should just update on Mount...
     videoPlayer.loadVideo(videoEl.current);
-  // this should just update on Mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -28,6 +29,8 @@ const Video: FC<VideoProps> = () => {
         <video
           className={styles.videoElement}
           ref={videoEl}
+          playsInline
+          poster={dogCoverImg}
         >
           <source src={videoFromFile} type="video/mp4" />
           Video playback is not supported in your browser!
