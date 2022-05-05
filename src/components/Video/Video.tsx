@@ -13,8 +13,9 @@ const Video: FC<VideoProps> = () => {
   const videoPlayer = useContext(VideoContext);
 
   useEffect(() => {
-    // onMount, update the context object...
     videoPlayer.loadVideo(videoEl.current);
+  // this should just update on Mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
