@@ -2,6 +2,7 @@ import React, { FC, useContext, useRef } from 'react';
 import { VideoContext } from '../../App';
 import { KeyFrame } from '../../types/interfaces';
 import { getKeyFrames } from '../../utils/data';
+import ProgressFrame from '../ProgressFrame/ProgressFrame';
 import styles from './Progressbar.module.scss';
 
 interface ProgressbarProps {}
@@ -44,28 +45,6 @@ const Progressbar: FC<ProgressbarProps> = () => {
     setKeyframes(frames);
   };
 
-  const getImageFrame = (frame: KeyFrame) => (
-    <div
-      key={frame.id}
-      className={styles.keyframe}
-      style={{left: `${frame.position}%`}}
-      onMouseDown={() => videoPlayer.skipTo(frame.timestamp)}
-      onMouseEnter={() => updateFrameVisibility(frame, true)}
-      onMouseLeave={() => updateFrameVisibility(frame, false)}
-  >
-    <div className={styles.line}></div>
-    <div
-      className={`${styles.thumbnail} ${frame.show && styles.show}`}
-    >
-      <img 
-        src={frame.image} 
-        className={styles.dogpic}
-        alt="Frame" 
-      />
-    </div>
-  </div>
-  );
-
   return (
     <div 
       className={styles.Progressbar} 
@@ -84,7 +63,7 @@ const Progressbar: FC<ProgressbarProps> = () => {
           ></div>
         </div>
 
-        {keyframes.map(frame => getImageFrame(frame))}
+        {keyframes.map(frame => <ProgressFrame frame={frame} setVisibility={updateFrameVisibility}/>)}
 
       </div>
     </div>
