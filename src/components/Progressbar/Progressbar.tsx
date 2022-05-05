@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import { VideoContext } from '../../App';
 import { KeyFrame } from '../../types/interfaces';
 import { getKeyFrames } from '../../utils/data';
 import styles from './Progressbar.module.scss';
@@ -7,9 +8,9 @@ interface ProgressbarProps {}
 
 const Progressbar: FC<ProgressbarProps> = () => {
 
-  let [progressLength, setProgressLength] = React.useState<number>(0);
-  let [keyframes, setKeyframes] = React.useState<KeyFrame[]>([]);
-
+  const [progressLength, setProgressLength] = React.useState<number>(0);
+  const [keyframes, setKeyframes] = React.useState<KeyFrame[]>([]);
+  const videoPlayer = useContext(VideoContext);
   
   // 1. load key frames
   // setKeyframes(getKeyFrames()); // but map through the element width when resized
@@ -54,7 +55,6 @@ const Progressbar: FC<ProgressbarProps> = () => {
       <div 
         id="track"
         className={styles.track}
-
       >
         <div className={styles.progressTrack}>
           <div 

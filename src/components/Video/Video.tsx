@@ -1,15 +1,21 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import Controls from '../Controls/Controls';
 import styles from './Video.module.scss';
 import videoFromFile from '../../assets/dog.mp4';
+import { VideoContext } from '../../App';
 
 interface VideoProps {}
 
 const Video: FC<VideoProps> = () => {
   
   const [showControls, setShowControls] = useState<boolean>(true);
-  const videoEl = useRef(null);
+  const videoEl = useRef<HTMLVideoElement>(null);
+  const videoPlayer = useContext(VideoContext);
 
+  useEffect(() => {
+    // onMount, update the context object...
+    videoPlayer.loadVideo(videoEl.current);
+  }, []);
 
   return (
     <div className={styles.Video} data-testid="Video">
